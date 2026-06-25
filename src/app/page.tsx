@@ -17,6 +17,7 @@ type FieldErrors = Record<string, string[]>;
 
 const DIRECTION_IMAGE_SRC = directionImageUrl;
 const TOTAL_SCORE_COUNT = AGENT_IDS.length * RATING_FIELDS.length;
+const GRID_COLUMNS_CLASS = "grid-cols-[minmax(160px,1.15fr)_repeat(4,minmax(130px,1fr))]";
 
 export default function SurveyPage() {
   const [draft, setDraft] = useState<SurveyDraft>(() => buildEmptySurveyDraft());
@@ -403,21 +404,21 @@ function ScoreMatrixSection({
     <div>
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <p className="text-sm leading-6 text-slate-600">
-          默认只展示核心评分；每个 Agent 的说明和补充题收在“说明/补充”里。
+          点击 Agent 名称可展开详细说明和补充题。
         </p>
         <ScoreProgress completedScoreCount={completedScoreCount} />
       </div>
 
       <div className="hidden overflow-x-auto lg:block">
-        <div className="min-w-[1120px] overflow-hidden rounded-lg border border-slate-200">
-          <div className="grid grid-cols-[minmax(160px,1.15fr)_repeat(5,minmax(130px,1fr))_minmax(150px,0.9fr)] bg-slate-100 text-xs font-semibold text-slate-600">
+        <div className="min-w-[960px] overflow-hidden rounded-lg border border-slate-200">
+          <div className={clsx("bg-slate-100 text-xs font-semibold text-slate-600", GRID_COLUMNS_CLASS)}>
             <div className="p-3">Agent</div>
             {RATING_FIELDS.map((field) => (
-              <div className="p-3 text-center" key={field.key}>
-                {field.label}
+              <div className="flex items-center justify-center gap-1 p-3" key={field.key}>
+                <span>{field.label}</span>
+                <InfoTooltip text={field.question} />
               </div>
             ))}
-            <div className="p-3">说明/补充</div>
           </div>
           {AGENT_IDS.map((agentId) => (
             <CompactAgentRow
@@ -482,36 +483,53 @@ function CompactAgentRow({
 }) {
   const agent = AGENTS[agentId];
   const hasError = RATING_FIELDS.some((field) => errors[`scores.${agentId}.${field.key}`]?.[0]);
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <div
-      className={clsx(
-        "grid grid-cols-[minmax(160px,1.15fr)_repeat(5,minmax(130px,1fr))_minmax(150px,0.9fr)] border-t border-slate-200 bg-white",
-        hasError && "bg-red-50/50"
-      )}
-    >
-      <div className="p-3">
-        <h3 className="text-base font-semibold text-ink">{agent.shortName}</h3>
-        <p className="mt-1 text-xs leading-5 text-slate-600">{agent.tagline}</p>
-      </div>
-      {RATING_FIELDS.map((field) => (
-        <div className="border-l border-slate-100 p-3" key={field.key}>
-          <RatingSegment
-            agentId={agentId}
-            field={field}
-            score={score[field.key]}
-            updateScore={updateScore}
-          />
-          <FieldError compact message={errors[`scores.${agentId}.${field.key}`]?.[0]} />
+    <div className={clsx("border-t border-slate-200", hasError && "bg-red-50/30")}>
+      {/* Score row */}
+      <div className={clsx("grid bg-white", GRID_COLUMNS_CLASS)}>
+        <div className="p-3">
+          <button
+            type="button"
+            className="flex items-center gap-1 text-left"
+            onClick={() => setExpanded((v) => !v)}
+          >
+            <h3 className="text-base font-semibold text-ink">{agent.shortName}</h3>
+            <svg
+              className={clsx("h-4 w-4 shrink-0 text-slate-400 transition-transform", expanded && "rotate-180")}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <p className="mt-1 text-xs leading-5 text-slate-600">{agent.tagline}</p>
         </div>
-      ))}
-      <div className="border-l border-slate-100 p-3">
-        <AgentDetailsDisclosure
-          agentId={agentId}
-          score={score}
-          updateScoreText={updateScoreText}
-        />
+        {RATING_FIELDS.map((field) => (
+          <div className="border-l border-slate-100 p-3" key={field.key}>
+            <RatingSegment
+              agentId={agentId}
+              field={field}
+              score={score[field.key]}
+              updateScore={updateScore}
+            />
+            <FieldError compact message={errors[`scores.${agentId}.${field.key}`]?.[0]} />
+          </div>
+        ))}
       </div>
+
+      {/* Full-width expandable detail section */}
+      {expanded ? (
+        <div className="border-t border-slate-100 bg-slate-50 p-4">
+          <AgentDetailContent
+            agentId={agentId}
+            score={score}
+            updateScoreText={updateScoreText}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -544,7 +562,7 @@ function CompactAgentCard({
           <p className="mt-2 text-sm leading-6 text-slate-600">{agent.tagline}</p>
         </div>
         <span className="shrink-0 rounded-md bg-white px-2.5 py-1 text-xs font-semibold text-blue-700">
-          {completedCount}/5
+          {completedCount}/{RATING_FIELDS.length}
         </span>
       </div>
       <div className="mt-4 space-y-3">
@@ -565,17 +583,24 @@ function CompactAgentCard({
         ))}
       </div>
       <div className="mt-4">
-        <AgentDetailsDisclosure
-          agentId={agentId}
-          score={score}
-          updateScoreText={updateScoreText}
-        />
+        <details className="group rounded-md border border-slate-200 bg-white p-3">
+          <summary className="cursor-pointer text-sm font-semibold text-blue-700">
+            说明/补充
+          </summary>
+          <div className="mt-3">
+            <AgentDetailContent
+              agentId={agentId}
+              score={score}
+              updateScoreText={updateScoreText}
+            />
+          </div>
+        </details>
       </div>
     </article>
   );
 }
 
-function AgentDetailsDisclosure({
+function AgentDetailContent({
   agentId,
   score,
   updateScoreText
@@ -591,41 +616,49 @@ function AgentDetailsDisclosure({
   const agent = AGENTS[agentId];
 
   return (
-    <details className="group rounded-md border border-slate-200 bg-white p-3">
-      <summary className="cursor-pointer text-sm font-semibold text-blue-700">
-        说明/补充
-      </summary>
-      <div className="mt-3 space-y-3 text-sm leading-6 text-slate-600">
-        <div className="rounded-md border border-slate-100 bg-slate-50 p-3">
-          <p className="text-xs font-semibold text-slate-500">典型场景</p>
-          <p className="mt-1">{agent.scene}</p>
-        </div>
-        <AgentWorkflowFlow steps={agent.workflow} />
-        <div className="flex flex-wrap gap-2">
-          {agent.keywords.map((keyword) => (
-            <span
-              className="rounded-md border border-blue-100 bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700"
-              key={keyword}
-            >
-              {keyword}
-            </span>
-          ))}
-        </div>
-        <TextArea
-          compact
-          label="你见过哪些客户有类似需求？"
-          placeholder="可以简单举例。"
-          value={score.customerExample}
-          onChange={(value) => updateScoreText(agentId, "customerExample", value)}
-        />
-        <TextArea
-          compact
-          label="这个 Agent 最应该解决客户哪一步工作？"
-          value={score.mostImportantStep}
-          onChange={(value) => updateScoreText(agentId, "mostImportantStep", value)}
-        />
+    <div className="space-y-3 text-sm leading-6 text-slate-600">
+      <div className="rounded-md border border-slate-100 bg-white p-3">
+        <p className="text-xs font-semibold text-slate-500">典型场景</p>
+        <p className="mt-1">{agent.scene}</p>
       </div>
-    </details>
+      <AgentWorkflowFlow steps={agent.workflow} />
+      <div className="flex flex-wrap gap-2">
+        {agent.keywords.map((keyword) => (
+          <span
+            className="rounded-md border border-blue-100 bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700"
+            key={keyword}
+          >
+            {keyword}
+          </span>
+        ))}
+      </div>
+      <TextArea
+        compact
+        label="你见过哪些客户有类似需求？"
+        placeholder="可以简单举例。"
+        value={score.customerExample}
+        onChange={(value) => updateScoreText(agentId, "customerExample", value)}
+      />
+      <TextArea
+        compact
+        label="这个 Agent 最应该解决客户哪一步工作？"
+        value={score.mostImportantStep}
+        onChange={(value) => updateScoreText(agentId, "mostImportantStep", value)}
+      />
+    </div>
+  );
+}
+
+function InfoTooltip({ text }: { text: string }) {
+  return (
+    <span className="group relative inline-flex">
+      <span className="flex h-4 w-4 cursor-help items-center justify-center rounded-full border border-slate-400 text-[10px] font-bold text-slate-500">
+        ?
+      </span>
+      <span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 w-48 -translate-x-1/2 rounded-md bg-slate-800 px-3 py-2 text-xs font-normal leading-5 text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+        {text}
+      </span>
+    </span>
   );
 }
 

@@ -8,7 +8,6 @@ const HEADER = [
   "pain_avg",
   "coverage_avg",
   "frequency_avg",
-  "result_usability_avg",
   "total_avg",
   "weighted_total",
   "top1_count",
@@ -26,20 +25,17 @@ export function buildAgentSummaryCsv(submissions: StoredSurveySubmission[]): str
     const painAvg = average(scores.map((score) => score.pain));
     const coverageAvg = average(scores.map((score) => score.coverage));
     const frequencyAvg = average(scores.map((score) => score.frequency));
-    const resultUsabilityAvg = average(scores.map((score) => score.resultUsability));
     const totalAvg = average([
       purchaseOrUpsellAvg,
       painAvg,
       coverageAvg,
-      frequencyAvg,
-      resultUsabilityAvg
+      frequencyAvg
     ]);
     const weightedTotal =
-      purchaseOrUpsellAvg * 0.3 +
+      purchaseOrUpsellAvg * 0.35 +
       painAvg * 0.25 +
-      coverageAvg * 0.15 +
-      frequencyAvg * 0.15 +
-      resultUsabilityAvg * 0.15;
+      coverageAvg * 0.2 +
+      frequencyAvg * 0.2;
 
     return [
       agentId,
@@ -48,7 +44,6 @@ export function buildAgentSummaryCsv(submissions: StoredSurveySubmission[]): str
       formatNumber(painAvg),
       formatNumber(coverageAvg),
       formatNumber(frequencyAvg),
-      formatNumber(resultUsabilityAvg),
       formatNumber(totalAvg),
       formatNumber(weightedTotal),
       countTop1(submissions, agentId),

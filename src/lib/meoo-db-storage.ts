@@ -34,7 +34,7 @@ export async function saveSubmissionToMeooDb(
     pain_score: score.pain,
     coverage_score: score.coverage,
     frequency_score: score.frequency,
-    result_usability_score: score.resultUsability,
+    result_usability_score: 0,
     customer_example: score.customerExample,
     most_important_step: score.mostImportantStep,
     paid_reason: score.paidReason ?? ""
@@ -143,7 +143,6 @@ export async function readSubmissionsFromMeooDb(): Promise<StoredSurveySubmissio
           pain: score.pain_score,
           coverage: score.coverage_score,
           frequency: score.frequency_score,
-          resultUsability: score.result_usability_score,
           customerExample: score.customer_example ?? "",
           mostImportantStep: score.most_important_step ?? "",
           paidReason: score.paid_reason ?? ""

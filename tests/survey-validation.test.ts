@@ -18,7 +18,6 @@ describe("validateSurveySubmission", () => {
       score.pain = 4;
       score.coverage = 4;
       score.frequency = 3;
-      score.resultUsability = 4;
     }
 
     const result = validateSurveySubmission(draft);
@@ -39,7 +38,6 @@ describe("validateSurveySubmission", () => {
       score.pain = 4;
       score.coverage = 4;
       score.frequency = 3;
-      score.resultUsability = 4;
     }
 
     const result = validateSurveySubmission(draft);
@@ -61,7 +59,6 @@ describe("validateSurveySubmission", () => {
       score.pain = 3;
       score.coverage = 3;
       score.frequency = 3;
-      score.resultUsability = 3;
     }
 
     const result = validateSurveySubmission(draft);
@@ -85,7 +82,6 @@ describe("validateSurveySubmission", () => {
       score.pain = 4;
       score.coverage = 4;
       score.frequency = 4;
-      score.resultUsability = 4;
     }
 
     const result = validateSurveySubmission(draft);

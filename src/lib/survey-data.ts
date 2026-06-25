@@ -34,11 +34,6 @@ export const RATING_FIELDS: RatingField[] = [
     key: "frequency",
     label: "使用频次",
     question: "客户会不会经常使用，而不是偶尔用一次？"
-  },
-  {
-    key: "resultUsability",
-    label: "结果可用性",
-    question: "它输出的内容，客户是否能直接拿去工作或对外使用？"
   }
 ];
 

@@ -22,7 +22,7 @@ export type Database = {
           pain_score: number
           purchase_or_upsell_score: number
           respondent_id: string
-          result_usability_score: number
+          result_usability_score: number | null
         }
         Insert: {
           agent_id: string
@@ -36,7 +36,7 @@ export type Database = {
           pain_score: number
           purchase_or_upsell_score: number
           respondent_id: string
-          result_usability_score: number
+          result_usability_score?: number | null
         }
         Update: {
           agent_id?: string
@@ -50,7 +50,7 @@ export type Database = {
           pain_score?: number
           purchase_or_upsell_score?: number
           respondent_id?: string
-          result_usability_score?: number
+          result_usability_score?: number | null
         }
         Relationships: [
           {

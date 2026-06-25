@@ -17,7 +17,6 @@ describe("buildAgentSummaryCsv", () => {
             pain: 5,
             coverage: 4,
             frequency: 4,
-            resultUsability: 5,
             customerExample: "A 客户",
             mostImportantStep: "首封开发信"
           },
@@ -26,7 +25,6 @@ describe("buildAgentSummaryCsv", () => {
             pain: 3,
             coverage: 3,
             frequency: 3,
-            resultUsability: 3,
             customerExample: "",
             mostImportantStep: ""
           },
@@ -35,7 +33,6 @@ describe("buildAgentSummaryCsv", () => {
             pain: 4,
             coverage: 4,
             frequency: 4,
-            resultUsability: 4,
             customerExample: "",
             mostImportantStep: ""
           },
@@ -44,7 +41,6 @@ describe("buildAgentSummaryCsv", () => {
             pain: 3,
             coverage: 2,
             frequency: 2,
-            resultUsability: 3,
             customerExample: "",
             mostImportantStep: ""
           },
@@ -53,7 +49,6 @@ describe("buildAgentSummaryCsv", () => {
             pain: 2,
             coverage: 2,
             frequency: 1,
-            resultUsability: 2,
             customerExample: "",
             mostImportantStep: ""
           }
@@ -73,10 +68,10 @@ describe("buildAgentSummaryCsv", () => {
     const csv = buildAgentSummaryCsv(submissions);
 
     expect(csv.split("\n")[0]).toBe(
-      "agent_id,agent_name,purchase_or_upsell_avg,pain_avg,coverage_avg,frequency_avg,result_usability_avg,total_avg,weighted_total,top1_count,top3_count,response_count"
+      "agent_id,agent_name,purchase_or_upsell_avg,pain_avg,coverage_avg,frequency_avg,total_avg,weighted_total,top1_count,top3_count,response_count"
     );
     expect(csv).toContain(
-      "email_outreach,邮件拓新 Agent,5.00,5.00,4.00,4.00,5.00,4.60,4.70,1,1,1"
+      "email_outreach,邮件拓新 Agent,5.00,5.00,4.00,4.00,4.50,4.60,1,1,1"
     );
   });
 });

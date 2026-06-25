@@ -24,8 +24,7 @@ export type ScoreKey =
   | "purchaseOrUpsell"
   | "pain"
   | "coverage"
-  | "frequency"
-  | "resultUsability";
+  | "frequency";
 
 export interface RatingField {
   key: ScoreKey;
@@ -60,7 +59,6 @@ export interface AgentScoreDraft {
   pain: number | null;
   coverage: number | null;
   frequency: number | null;
-  resultUsability: number | null;
   customerExample: string;
   mostImportantStep: string;
   paidReason?: string;
@@ -99,7 +97,6 @@ export interface ValidAgentScore {
   pain: number;
   coverage: number;
   frequency: number;
-  resultUsability: number;
   customerExample: string;
   mostImportantStep: string;
   paidReason?: string;

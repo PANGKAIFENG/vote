@@ -24,7 +24,6 @@ const agentScoreSchema = z.object({
   pain: ratingSchema,
   coverage: ratingSchema,
   frequency: ratingSchema,
-  resultUsability: ratingSchema,
   customerExample: z.string().trim().optional().default(""),
   mostImportantStep: z.string().trim().optional().default(""),
   paidReason: z.string().trim().optional()
@@ -100,7 +99,6 @@ export function buildEmptySurveyDraft(): SurveyDraft {
     pain: null,
     coverage: null,
     frequency: null,
-    resultUsability: null,
     customerExample: "",
     mostImportantStep: "",
     paidReason: ""
