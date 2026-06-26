@@ -16,6 +16,7 @@ import type {
 type FieldErrors = Record<string, string[]>;
 
 const DIRECTION_IMAGE_SRC = directionImageUrl;
+const APP_VERSION = "v13-visibility";
 const TOTAL_SCORE_COUNT = AGENT_IDS.length * RATING_FIELDS.length;
 const GRID_COLUMNS_CLASS = "grid-cols-[minmax(160px,1.15fr)_repeat(4,minmax(130px,1fr))]";
 
@@ -169,7 +170,12 @@ export default function SurveyPage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-10">
       <header className="mb-6 rounded-lg border border-blue-100 bg-white p-5 shadow-soft md:p-7">
-        <p className="mb-3 text-sm font-semibold text-blue-700">预计填写时间：3-5 分钟</p>
+        <div className="mb-3 flex items-center gap-2">
+          <p className="text-sm font-semibold text-blue-700">预计填写时间：3-5 分钟</p>
+          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-400">
+            {APP_VERSION}
+          </span>
+        </div>
         <h1 className="text-3xl font-semibold tracking-normal text-ink md:text-5xl">
           ODM 专家智能体优先级调研
         </h1>
@@ -354,6 +360,7 @@ export default function SurveyPage() {
           </div>
         </div>
       </form>
+      <span aria-hidden="true" className="sr-only" data-version={APP_VERSION} />
     </main>
   );
 }
