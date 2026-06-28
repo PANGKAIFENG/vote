@@ -20,6 +20,13 @@ describe("survey page UI contract", () => {
     expect(pageSource).toContain("space-y-4 lg:hidden");
   });
 
+  it("keeps the desktop score matrix header aligned to the rating columns", () => {
+    expect(pageSource).toContain(
+      'className={clsx("grid bg-slate-100 text-xs font-semibold text-slate-600", GRID_COLUMNS_CLASS)}'
+    );
+    expect(pageSource).toContain('className={clsx("grid bg-white", GRID_COLUMNS_CLASS)}');
+  });
+
   it("keeps supplemental agent details visual instead of dense text lists", () => {
     expect(pageSource).toContain("AgentWorkflowFlow");
     expect(pageSource).not.toContain("list-decimal");

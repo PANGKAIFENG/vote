@@ -418,7 +418,7 @@ function ScoreMatrixSection({
 
       <div className="hidden overflow-x-auto lg:block">
         <div className="min-w-[960px] overflow-hidden rounded-lg border border-slate-200">
-          <div className={clsx("bg-slate-100 text-xs font-semibold text-slate-600", GRID_COLUMNS_CLASS)}>
+          <div className={clsx("grid bg-slate-100 text-xs font-semibold text-slate-600", GRID_COLUMNS_CLASS)}>
             <div className="p-3">Agent</div>
             {RATING_FIELDS.map((field) => (
               <div className="flex items-center justify-center gap-1 p-3" key={field.key}>
