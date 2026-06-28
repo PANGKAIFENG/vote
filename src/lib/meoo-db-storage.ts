@@ -34,7 +34,6 @@ export async function saveSubmissionToMeooDb(
     pain_score: score.pain,
     coverage_score: score.coverage,
     frequency_score: score.frequency,
-    result_usability_score: 0,
     customer_example: score.customerExample,
     most_important_step: score.mostImportantStep,
     paid_reason: score.paidReason ?? ""
