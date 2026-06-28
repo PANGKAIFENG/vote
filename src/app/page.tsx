@@ -416,8 +416,8 @@ function ScoreMatrixSection({
         <ScoreProgress completedScoreCount={completedScoreCount} />
       </div>
 
-      <div className="hidden overflow-x-auto lg:block">
-        <div className="min-w-[960px] overflow-hidden rounded-lg border border-slate-200">
+      <div className="hidden overflow-x-auto lg:block" data-score-matrix-desktop>
+        <div className="min-w-[960px] overflow-hidden rounded-lg border border-slate-200" data-score-matrix-table>
           <div className={clsx("grid bg-slate-100 text-xs font-semibold text-slate-600", GRID_COLUMNS_CLASS)}>
             <div className="p-3">Agent</div>
             {RATING_FIELDS.map((field) => (
@@ -658,11 +658,17 @@ function AgentDetailContent({
 
 function InfoTooltip({ text }: { text: string }) {
   return (
-    <span className="group relative inline-flex">
-      <span className="flex h-4 w-4 cursor-help items-center justify-center rounded-full border border-slate-400 text-[10px] font-bold text-slate-500">
+    <span className="group relative z-30 inline-flex">
+      <span
+        className="flex h-4 w-4 cursor-help items-center justify-center rounded-full border border-slate-400 text-[10px] font-bold text-slate-500"
+        data-score-tooltip-trigger
+      >
         ?
       </span>
-      <span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 w-48 -translate-x-1/2 rounded-md bg-slate-800 px-3 py-2 text-xs font-normal leading-5 text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+      <span
+        className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 w-56 -translate-x-1/2 rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-xs font-normal leading-5 text-slate-700 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100"
+        data-score-tooltip
+      >
         {text}
       </span>
     </span>
